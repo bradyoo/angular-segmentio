@@ -32,7 +32,7 @@ angular.module('segmentio', ['ng'])
 
             // Listening to $viewContentLoaded event to track pageview
             $rootScope.$on('$viewContentLoaded', function() {
-                if (service.location != $location.path()) {
+                if (!window.ANGULAR_SEGMENTIO_DISABLE_AUTOTRACK && service.location != $location.path()) {
                     service.location = $location.path();
                     service.pageview(service.location);
                 }
@@ -54,6 +54,10 @@ angular.module('segmentio', ['ng'])
                 // Find the first script element on the page and insert our script next to it.
                 var firstScript = document.getElementsByTagName('script')[0];
                 firstScript.parentNode.insertBefore(script, firstScript);
+            };
+
+            service.autoTrackingEnabled = function(enabled) {
+                autoTracking = enabled;
             };
 
             return service;
